@@ -1,3 +1,11 @@
+.bg-emerald-400 {
+  background-color: rgba(52, 211, 153, var(--tw-bg-opacity, 1));
+}
+
+.bg-emerald-500 {
+  background-color: rgba(16, 185, 129, var(--tw-bg-opacity, 1));
+}
+
 .loading-spinner {
   animation: spin 1s linear infinite;
 }
