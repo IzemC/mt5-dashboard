@@ -6,6 +6,10 @@
   background-color: rgba(16, 185, 129, var(--tw-bg-opacity, 1));
 }
 
+.bg-rose-500 {
+  background-color: rgba(244, 63, 94, var(--tw-bg-opacity, 1));
+}
+
 .loading-spinner {
   animation: spin 1s linear infinite;
 }
