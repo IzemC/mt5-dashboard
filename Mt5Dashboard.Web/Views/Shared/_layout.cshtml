@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MT5 Dashboard</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Mt5Dashboard.Web.styles.css" asp-append-version="true" />
+</head>
+<body class="h-full">
+    <!-- Loading indicator -->
+    <div id="loading" class="fixed inset-0 bg-white/80 z-50 flex items-center justify-center hidden">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+    </div>
+
+    <div class="min-h-full">
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <p class="text-center text-gray-500 text-sm">
+                &copy; @DateTime.Now.Year - MT5 Dashboard
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loading = document.getElementById('loading');
+            
+            const originalFetch = window.fetch;
+            window.fetch = async function(...args) {
+                loading.classList.remove('hidden');
+                try {
+                    const response = await originalFetch(...args);
+                    return response;
+                } finally {
+                    loading.classList.add('hidden');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
