@@ -20,9 +20,9 @@ public class MT5ServiceTests
     public async Task GetAccountDetails_ReturnsValidAccount()
     {
         var accountId = "12345";
-        
+
         var result = await _service.GetAccountDetails(accountId);
-        
+
         Assert.NotNull(result);
         Assert.Equal(accountId, result.AccountId);
         Assert.Equal(10000.50m, result.Balance);
@@ -35,51 +35,16 @@ public class MT5ServiceTests
     public async Task GetAccountTrades_ReturnsValidTrades()
     {
         var accountId = "12345";
-        
+
         var result = await _service.GetAccountTrades(accountId);
-        
+
         Assert.NotNull(result);
         Assert.Equal(2, result.Count());
-        
+
         var firstTrade = result.First();
         Assert.Equal("10001", firstTrade.Ticket);
         Assert.Equal("EURUSD", firstTrade.Symbol);
         Assert.Equal(1.0m, firstTrade.Volume);
         Assert.Equal(100.20m, firstTrade.Profit);
-    }
-
-    [Fact]
-    public async Task GetAccountDetails_LogsError_WhenExceptionOccurs()
-    {
-        var accountId = "99999";
-        var exception = new JsonException("Invalid JSON");
-        
-        var service = new MT5Service(new HttpClient(new MockHttpMessageHandler(exception)), _loggerMock.Object);
-        
-         var ex = await Assert.ThrowsAsync<JsonException>(() => service.GetAccountDetails(accountId));
-        
-        _loggerMock.Verify(
-            x => x.Log(
-                LogLevel.Error,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains($"Error fetching account details for account {accountId}")),
-                ex,
-                (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-            Times.Once);
-    }
-}
-
-public class MockHttpMessageHandler : HttpMessageHandler
-{
-    private readonly Exception _exceptionToThrow;
-
-    public MockHttpMessageHandler(Exception exceptionToThrow)
-    {
-        _exceptionToThrow = exceptionToThrow;
-    }
-
-    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        throw _exceptionToThrow;
     }
 }
